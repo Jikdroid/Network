@@ -20,7 +20,10 @@ class MainActivity : AppCompatActivity() {
     private val textContent: TextView by lazy {
         findViewById(R.id.textContent)
     }
-    private val client = OkHttpClient()
+    private val client =
+        OkHttpClient().newBuilder()
+            .addInterceptor(ChangeInterceptor())
+            .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +50,9 @@ class MainActivity : AppCompatActivity() {
                     println("$name: $value")
                 }
                 val result = response.body!!.string()
-                val data = Gson().fromJson<GetData>(result,GetData::class.java)
-                data.facts[0]
+//                val data = Gson().fromJson(result,GetData::class.java)
+//                data.facts[0]
+                result
             }
         }
         CoroutineScope(Dispatchers.Main).launch {
