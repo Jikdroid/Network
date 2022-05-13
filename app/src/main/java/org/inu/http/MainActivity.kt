@@ -50,9 +50,8 @@ class MainActivity : AppCompatActivity() {
                     println("$name: $value")
                 }
                 val result = response.body!!.string()
-//                val data = Gson().fromJson(result,GetData::class.java)
-//                data.facts[0]
-                result
+                val data = Gson().fromJson<GetData>(result,GetData::class.java)
+                data.facts[0]
             }
         }
         CoroutineScope(Dispatchers.Main).launch {
