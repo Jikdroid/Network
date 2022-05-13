@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private val client =
         OkHttpClient().newBuilder()
             .addInterceptor(ChangeInterceptor())
+            .addInterceptor(RetryInterceptor())
             .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         }
         val facts = CoroutineScope(Dispatchers.IO).async(exceptionHandler) {
             val request = Request.Builder()
-                .url("http://dog-api.kinduff.com/api/facts")
+                .url("http://dog-api.kinduff.com/api/facs")
                 .build()
 
             client.newCall(request).execute().use { response ->
