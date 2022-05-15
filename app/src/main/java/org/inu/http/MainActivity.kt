@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         OkHttpClient().newBuilder()
             .addInterceptor(ChangeInterceptor())
             .addInterceptor(RetryInterceptor())
+            .addInterceptor(HeaderInterceptor())
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level= HttpLoggingInterceptor.Level.BODY
             })
