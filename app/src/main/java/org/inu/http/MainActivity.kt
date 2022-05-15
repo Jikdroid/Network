@@ -8,6 +8,8 @@ import androidx.appcompat.widget.AppCompatButton
 import com.google.gson.Gson
 import kotlinx.coroutines.*
 import okhttp3.*
+import okhttp3.internal.platform.Platform
+import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +26,9 @@ class MainActivity : AppCompatActivity() {
         OkHttpClient().newBuilder()
             .addInterceptor(ChangeInterceptor())
             .addInterceptor(RetryInterceptor())
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level= HttpLoggingInterceptor.Level.BODY
+            })
             .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
