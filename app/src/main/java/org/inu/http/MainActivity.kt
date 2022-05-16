@@ -22,6 +22,9 @@ class MainActivity : AppCompatActivity() {
     private val textContent: TextView by lazy {
         findViewById(R.id.textContent)
     }
+
+    private var result : GetData? = null
+
     private val client =
         OkHttpClient().newBuilder()
             .addInterceptor(ChangeInterceptor())
@@ -37,11 +40,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         buttonRequest.setOnClickListener {
-            run()
+            runWithRetrofit()
         }
+
+
     }
 
-    private fun run() {
+    private fun runWithHttp() {
         val exceptionHandler = CoroutineExceptionHandler { context, throwable ->
             println("CoroutineExceptionHandler : $throwable")
         }
@@ -64,5 +69,13 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             textContent.text = facts.await()
         }
+    }
+
+    private fun runWithRetrofit(){
+        DogRepository.getDog(
+            success = {
+                textContent.text = it.facts[0]
+            }
+        )
     }
 }
