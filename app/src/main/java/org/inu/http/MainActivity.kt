@@ -75,8 +75,8 @@ class MainActivity : AppCompatActivity() {
     private fun runWithRetrofit() {
         CoroutineScope(Dispatchers.Main).launch {
             when(val result = DogRepository.getDog()){
-                is GetData -> textContent.text = result.facts[0]
-                null -> Toast.makeText(this@MainActivity, "네트워크 에러", Toast.LENGTH_SHORT).show()
+                is Result.Success -> textContent.text = result.data.facts[0]
+                is Result.Error -> Toast.makeText(this@MainActivity, "${result.exception}", Toast.LENGTH_SHORT).show()
             }
         }
     }
