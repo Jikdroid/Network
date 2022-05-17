@@ -3,12 +3,13 @@ package org.inu.http
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import com.google.gson.Gson
 import kotlinx.coroutines.*
-import okhttp3.*
-import okhttp3.internal.platform.Platform
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
 
@@ -23,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         findViewById(R.id.textContent)
     }
 
-    private var result : GetData? = null
+    private var result: GetData? = null
 
     private val client =
         OkHttpClient().newBuilder()
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             .addInterceptor(RetryInterceptor())
             .addInterceptor(HeaderInterceptor())
             .addInterceptor(HttpLoggingInterceptor().apply {
-                level= HttpLoggingInterceptor.Level.BODY
+                level = HttpLoggingInterceptor.Level.BODY
             })
             .build()
 
@@ -62,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                     println("$name: $value")
                 }
                 val result = response.body!!.string()
-                val data = Gson().fromJson<GetData>(result,GetData::class.java)
+                val data = Gson().fromJson<GetData>(result, GetData::class.java)
                 data.facts[0]
             }
         }
@@ -71,11 +72,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun runWithRetrofit(){
-        DogRepository.getDog(
-            success = {
-                textContent.text = it.facts[0]
+    private fun runWithRetrofit() {
+        CoroutineScope(Dispatchers.Main).launch {
+            when(val result= DogRepository.getDog()){
+                is Result.Success -> textContent.text = result.data.facts[0]
+                is Result.Error -> Toast.makeText(this@MainActivity, "${result.exception}", Toast.LENGTH_SHORT).show()
             }
-        )
+        }
     }
 }

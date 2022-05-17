@@ -9,7 +9,6 @@ class HeaderInterceptor: Interceptor {
             .newBuilder()
             .addHeader("User-Agent","PostmanRuntime/7.29.0")
             .build()
-
         return chain.proceed(request)
     }
 }

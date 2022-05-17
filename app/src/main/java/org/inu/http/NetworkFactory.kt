@@ -19,8 +19,7 @@ class NetworkFactory {
         val client = OkHttpClient()
             .newBuilder()
             .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
+                level = HttpLoggingInterceptor.Level.BODY })
             .build()
     }
 }
