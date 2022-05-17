@@ -6,5 +6,5 @@ import retrofit2.http.GET
 
 interface DogHttpService {
     @GET("/api/facts")
-    suspend fun getDog(): Response<GetData>
+    suspend fun getDog(): GetData
 }
