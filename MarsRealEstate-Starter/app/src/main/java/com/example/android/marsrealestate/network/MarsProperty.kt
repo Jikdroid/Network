@@ -23,5 +23,5 @@ data class MarsProperty(
     val id: String,
     val type: String,
     val price: Double,
-    @Json(name = "img_src") val img_src: String
+    @Json(name = "img_src") val imgSrcUrl: String
 )
