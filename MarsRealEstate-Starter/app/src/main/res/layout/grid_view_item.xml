@@ -28,11 +28,16 @@
         <variable
             name="property"
             type="com.example.android.marsrealestate.network.MarsProperty" />
+
+        <variable
+            name="clickListener"
+            type="com.example.android.marsrealestate.overview.PhotoGridAdapter.OnClickListener" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="170dp">
+        android:layout_height="170dp"
+        android:onClick="@{() -> clickListener.onClick(property)}">
 
         <ImageView
             android:id="@+id/mars_image"
