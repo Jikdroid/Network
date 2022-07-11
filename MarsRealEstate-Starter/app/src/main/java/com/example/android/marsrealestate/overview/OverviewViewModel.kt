@@ -22,6 +22,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.marsrealestate.network.MarsApi
+import com.example.android.marsrealestate.network.MarsApiFilter
 import com.example.android.marsrealestate.network.MarsProperty
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -52,22 +53,26 @@ class OverviewViewModel : ViewModel() {
      * Call getMarsRealEstateProperties() on init so we can display status immediately.
      */
     init {
-        getMarsRealEstateProperties()
+        getMarsRealEstateProperties(MarsApiFilter.SHOW_ALL)
     }
 
     /**
      * Sets the value of the status LiveData to the Mars API status.
      */
-    private fun getMarsRealEstateProperties() {     // 시작할 때만 호출
+    private fun getMarsRealEstateProperties(filter:MarsApiFilter) {     // 시작할 때만 호출
        viewModelScope.launch {
            _status.value = MarsApiStatus.LOADING
            try {
                _status.value = MarsApiStatus.DONE
-               _properties.value = MarsApi.retrofitService.getProperties()
+               _properties.value = MarsApi.retrofitService.getProperties(filter.value)
            } catch (e: Exception){
                _status.value = MarsApiStatus.ERROR
                _properties.value = ArrayList()
            }
        }
+    }
+
+    fun updateFilter(filter:MarsApiFilter){
+        getMarsRealEstateProperties(filter)
     }
 }
